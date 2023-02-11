@@ -1,7 +1,4 @@
-// Title         pluginMain.cpp
-// Summary       plugin declaration
-// Copyright     2020 Artineering and/or its licensors
-// License       MIT
+#include "pluginUtils.hpp"
 
 #include <stdio.h>
 #include <maya/MFnPlugin.h>
@@ -9,27 +6,28 @@
 
 // On plug-in initialization we register a new override
 MStatus initializePlugin(MObject obj) {
-    MStatus status;
-    MFnPlugin plugin(obj, "Artineering", "1.0", "Any");
+  MStatus status;
+  MFnPlugin plugin(obj, "Artineering", "1.0", "Any");
 
-    #if defined(NT_PLUGIN)
-        std::cout.set_rdbuf(MStreamUtils::stdOutStream().rdbuf());
-        std::cerr.set_rdbuf(MStreamUtils::stdErrorStream().rdbuf());
-    #endif
+#if defined(NT_PLUGIN)
+  std::cout.set_rdbuf(MStreamUtils::stdOutStream().rdbuf());
+  std::cerr.set_rdbuf(MStreamUtils::stdErrorStream().rdbuf());
+#endif
 
-    // register plugin elements i.e., command, nodes
+  utils::setPluginEnv(plugin.name());
 
-    return status;
+  // register plugin elements i.e., command, nodes
+
+  return status;
 }
 
 
 // On plug-in de-initialization we deregister a new override
-MStatus uninitializePlugin(MObject obj)
-{
-    MStatus status;
-    MFnPlugin plugin(obj);
+MStatus uninitializePlugin(MObject obj) {
+  MStatus status;
+  MFnPlugin plugin(obj);
 
-    // deregister plugin elements i.e., command, nodes
+  // deregister plugin elements i.e., command, nodes
 
-    return status;
+  return status;
 }

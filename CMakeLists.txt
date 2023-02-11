@@ -1,26 +1,32 @@
-cmake_minimum_required(VERSION 3.1)
-project(pluginName)
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+cmake_minimum_required(VERSION 3.16)
+project(debugTargets)
 
-# Define Maya version we are compiling to
-set(MAYA_VERSION 2022 CACHE STRING "Maya version")
+# FindMaya.cmake directory
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # C++17 for everything
 set(CMAKE_CXX_STANDARD 17) 
 set(CMAKE_CXX_STANDARD_REQUIRED ON) 
 
-# FindMaya.cmake directory
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# FindMaya (required)
+set(MAYA_VERSION 2017 CACHE STRING "Maya version")
 find_package(Maya REQUIRED)
+
 include_directories(${MAYA_INCLUDE_DIR})  # define a list of preprocessor include file search directories
 include_directories("/")  # header files should also be included
 
 link_directories(${MAYA_LIBRARY_DIR}) #specifies a directory where a linker should search for libraries
 
-# Set source files (glob is discouraged for big projects, set each individual source file instead)
+# Set source files
 file(GLOB SRCS CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/*.c src/*.cpp)
 file(GLOB HEADERS CONFIGURE_DEPENDS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/*.h src/*.hpp)
+MESSAGE(STATUS ${SRCS})
+MESSAGE(STATUS ${HEADERS})
+
 set(SRCS ${SRCS} ${HEADERS})
+
 
 # Plugin as a library
 ADD_LIBRARY(${PROJECT_NAME} SHARED ${SRCS})
